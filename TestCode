@@ -12,10 +12,15 @@ import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
-
+/**
+* Shows how to use input to achieve cool results. Thanks to Azziplekkus1337 for the better way of handling the cool-down!
+*
+* @author Oskar
+*/
 public class InputDemo {
 
     private static List<Box> shapes = new ArrayList<Box>(3);
+    private static List<Player> user = new ArrayList<Player>(1);
     private static boolean somethingIsSelected = false;
     private static long lastColourChange;
 
@@ -33,6 +38,7 @@ public class InputDemo {
         glOrtho(0, 640, 480, 0, 1, -1);
         
         glMatrixMode(GL_MODELVIEW);
+        int userx=250,usery=175;
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT);
             while (Keyboard.next()) {
@@ -67,11 +73,8 @@ public class InputDemo {
             
             for (int i=0;i<1;i++)
             {
-              float r,g,b;
-            	r=.208f;
-            	g=.55f;
-            	b=.55f;
-            	glColor3f(r, g, b);
+            	
+            	glColor3f(.2f, .6f,.2f);
             	
 	            
                 glBegin(GL_QUADS);
@@ -90,10 +93,26 @@ public class InputDemo {
                 glVertex2f(180, 140);
                 glEnd();
                 
+                
+                if (Keyboard.isKeyDown(Keyboard.KEY_UP)&&usery>=0) {
+                    usery-=5;
+                } 
+                else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) && usery<480) {
+                    usery+=5;
+                }
+                else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) && userx>0) {
+                    userx-=5;
+                }
+                else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && userx<640) {
+                    userx+=5;
+                }
+                
+                
+                glColor3f(.2f, .2f,.7f);
                 glBegin(GL_TRIANGLE_FAN);
                 //glVertex2d(200,100);
             	for(int j =0; j <= 360; j++){
-            	glVertex2f((float)(250 + Math.sin(j) * 20), (float)(175 + Math.cos(j) * 20));
+            	glVertex2f((float)(userx + Math.sin(j) * 5), (float)(usery + Math.cos(j) * 5));
             	}
             	glEnd(); 
             }
@@ -122,7 +141,7 @@ public class InputDemo {
         }
 
         boolean isInBounds(int mouseX, int mouseY) {
-            return mouseX > x && mouseX < x + 50 && mouseY > y && mouseY < y + 50;
+            return mouseX > x-18 && mouseX < x + 18 && mouseY > y-18 && mouseY < y + 18;
         }
 
         void update(int dx, int dy) {
@@ -139,23 +158,55 @@ public class InputDemo {
 
         void draw() {
             glColor3f(colorRed, colorGreen, colorBlue);
-            glBegin(GL_QUADS);
-            glVertex2f(x, y);
-            glVertex2f(x + 50, y);
-            glVertex2f(x + 50, y + 50);
-            glVertex2f(x, y + 50);
-            glEnd();
+            glBegin(GL_TRIANGLE_FAN);
+            glVertex2d(x,y);
+        	for(int j =0; j <= 360; j++){
+        	glVertex2f((float)(x + Math.sin(j) * 5), (float)(y + Math.cos(j) * 5));
+        	}
+        	glEnd(); 
         }
     }
-    void DrawCircle(double cx, double cy, double r, int num_segments) 
-    { 
-    	glBegin(GL_LINE_LOOP);
-    	for(int i =0; i <= 300; i++){
-    	double angle = 2 * Math.PI * i / 300;
-    	double x = Math.cos(angle);
-    	double y = Math.sin(angle);
-    	glVertex2d(x,y);
-    	}
-    	glEnd();  
+    
+    private static class Player {
+
+        public int x, y;
+        public boolean selected = false;
+        private float colorRed, colorBlue, colorGreen;
+
+        Player(int x, int y) {
+            this.x = x;
+            this.y = y;
+
+            Random randomGenerator = new Random();
+            colorRed = randomGenerator.nextFloat();
+            colorBlue = randomGenerator.nextFloat();
+            colorGreen = randomGenerator.nextFloat();
+        }
+
+        boolean isInBounds(int mouseX, int mouseY) {
+            return mouseX > x-12 && mouseX < x + 12 && mouseY > y-12 && mouseY < y + 12;
+        }
+
+        void update(int dx, int dy) {
+            x += dx;
+            y += dy;
+        }
+
+        void randomiseColors() {
+            Random randomGenerator = new Random();
+            colorRed = randomGenerator.nextFloat();
+            colorBlue = randomGenerator.nextFloat();
+            colorGreen = randomGenerator.nextFloat();
+        }
+
+        void draw() {
+            glColor3f(colorRed, colorGreen, colorBlue);
+            glBegin(GL_TRIANGLE_FAN);
+            glVertex2d(x,y);
+        	for(int j =0; j <= 360; j++){
+        	glVertex2f((float)(x + Math.sin(j) * 20), (float)(y + Math.cos(j) * 20));
+        	}
+        	glEnd(); 
+        }
     }
 }
