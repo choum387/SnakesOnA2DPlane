@@ -94,23 +94,31 @@ public class InputDemo {
                 glEnd();
                 
                 
-                if (Keyboard.isKeyDown(Keyboard.KEY_UP)&&usery>=0) {
-                	userx += Math.cos(Math.toRadians(heading)) * 2;
-            		usery -= Math.sin(Math.toRadians(heading)) * 2;
+                if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+                	userx += Math.cos(Math.toRadians(heading)) * 3;
+            		usery -= Math.sin(Math.toRadians(heading)) * 3;
                 } 
-                else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) && usery<480) {
-                	userx += Math.cos(Math.toRadians(heading)) * 2;
-            		usery += Math.sin(Math.toRadians(heading)) * 2;
+                else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+                	userx -= Math.cos(Math.toRadians(heading)) * 3;
+            		usery += Math.sin(Math.toRadians(heading)) * 3;
                 }
-                if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) && userx>0) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
                     heading+=5;
                 }
-                else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && userx<640) {
+                else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
                 	heading-=5;
                 }
                 
                 
+                
                 glColor3f(.2f, .2f,.7f);
+                
+                glLineWidth(2);
+                glBegin(GL_LINES);
+                glVertex2f(userx, usery);
+                glVertex2f((float)(userx+Math.cos(Math.toRadians(heading)) * 10), (float)(usery-Math.sin(Math.toRadians(heading)) * 10));
+                glEnd();
+                
                 glBegin(GL_TRIANGLE_FAN);
                 //glVertex2d(200,100);
             	for(int j =0; j <= 360; j++){
