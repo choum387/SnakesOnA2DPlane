@@ -69,7 +69,23 @@ public class InputDemo {
                 }
                 if(Math.hypot(box.x-userx, box.y-usery)<50)
                 {
-                	System.out.println(Math.hypot(box.x-userx, box.y-usery));
+                	//System.out.println(Math.hypot(box.x-userx, box.y-usery));
+                	double relDegree=0;
+                	if (box.x-userx>0 && box.y-usery<0)
+                	relDegree=(-Math.toDegrees(Math.asin((box.y-usery)/Math.hypot(box.x-userx, box.y-usery))));
+                	else if (box.x-userx<0&&box.y-usery<0)
+                		relDegree=(90+(90-(-Math.toDegrees(Math.asin((box.y-usery)/Math.hypot(box.x-userx, box.y-usery))))));
+                	else if (box.x-userx<0 && box.y-usery>0)
+                		relDegree=(180+(Math.toDegrees(Math.asin((box.y-usery)/Math.hypot(box.x-userx, box.y-usery)))));
+                	else if (box.x-userx>0 && box.y-usery>0)
+                		relDegree=(270+(90-(Math.toDegrees(Math.asin((box.y-usery)/Math.hypot(box.x-userx, box.y-usery))))));
+                	
+                	if (relDegree<=heading+45 && relDegree>=heading-45)
+                		System.out.println("Activated "+heading+" "+relDegree);
+                	if (relDegree>=315 &&heading<=45-(360-relDegree))
+                	{
+                		System.out.println("Activated "+heading+" "+relDegree);
+                	}
                 }
                 box.draw();
             }
@@ -106,7 +122,7 @@ public class InputDemo {
             		usery%=480;
             		if (usery<0)
             			usery=480;
-            		status(userx,usery,heading);
+            		//status(userx,usery,heading);
                 } 
                 else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
                 	userx -= Math.cos(Math.toRadians(heading)) * 3;
@@ -117,17 +133,17 @@ public class InputDemo {
             		usery%=480;
             		if (usery<0)
                 		usery=480;
-            		status(userx,usery,heading);
+            		//status(userx,usery,heading);
                 }
                 if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
                     heading+=5;
                     heading%=360;
-                    status(userx,usery,heading);
+                    //status(userx,usery,heading);
                 }
                 else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
                 	heading-=5;
                 	heading%=360;
-                	status(userx,usery,heading);
+                	//status(userx,usery,heading);
                 }
                 
             	if (radar)
