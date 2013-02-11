@@ -39,11 +39,19 @@ public class InputDemo {
         
         glMatrixMode(GL_MODELVIEW);
         int userx=250,usery=175,heading=90;
+        boolean radar=false;
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT);
             while (Keyboard.next()) {
                 if (Keyboard.getEventKey() == Keyboard.KEY_C && Keyboard.getEventKeyState() && shapes.size()<4) {
                     shapes.add(new Box(Mouse.getX(), 480-Mouse.getY()));
+                }
+                else if (Keyboard.getEventKey() == Keyboard.KEY_R && Keyboard.getEventKeyState())
+                {
+                	if(!radar)
+                		radar=true;
+                	else
+                		radar=false;
                 }
             }
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -109,8 +117,8 @@ public class InputDemo {
                 	heading-=5;
                 }
                 
-                
-                
+            	if (radar)
+                drawHollowCircle(userx,usery,50);
                 glColor3f(.2f, .2f,.7f);
                 
                 glLineWidth(2);
@@ -176,6 +184,20 @@ public class InputDemo {
         	glEnd(); 
         }
     }
+    static void drawHollowCircle(float x, float y, float radius){
+    	int i;
+    	int lineAmount = 100; //# of triangles used to draw circle
+    	//GLfloat radius = 0.8f; //radius
+    	float twicePi = (float) (2.0f * Math.PI);
+    	glBegin(GL_LINE_LOOP);
+    	for(i = 0; i <= lineAmount;i++) {
+    	glVertex2f(
+    	(float)(x + (radius * Math.cos(i * twicePi / lineAmount))),
+    	(float)(y + (radius* Math.sin(i * twicePi / lineAmount)))
+    	);
+    	}
+    	glEnd();
+    	}
     
     private static class Player {
 
